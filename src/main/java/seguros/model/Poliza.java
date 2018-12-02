@@ -1,34 +1,42 @@
 package seguros.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "poliza")
 @EntityListeners(AuditingEntityListener.class)
-//@JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
-//        allowGetters = true)
 
 public class Poliza {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Date fecha_inicio;
+	private LocalDate fecha_inicio;
 
-	private Date fecha_fin;
+	private LocalDate fecha_fin;
 
 	private Float prima;
 
 	private Float porcentaje_de_comision;
 
-	private int id_estado;
+	private Long id_estado;
 
 	private String Tipo;
 
@@ -36,12 +44,24 @@ public class Poliza {
 		return id;
 	}
 
-	public Date getFecha_inicio() {
-		return fecha_inicio;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "id_estado", insertable = false, updatable = false)
+	private Estado estado;
+
+	public String getEstado() {
+		return estado.getDescripcion();
 	}
 
-	public Date getFecha_fin() {
-		return fecha_fin;
+	public LocalDate getFecha_inicio() {
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate fecha = LocalDate.parse(fecha_inicio.toString(), df);
+		return fecha;
+	}
+
+	public LocalDate getFecha_fin() {
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate fecha = LocalDate.parse(fecha_fin.toString(), df);
+		return fecha;
 	}
 
 	public Float getPrima() {
@@ -52,14 +72,14 @@ public class Poliza {
 		return porcentaje_de_comision;
 	}
 
-	public int getId_estado() {
+	public Long getId_estado() {
 		return id_estado;
 	}
-	
-	public void setId_estado(int id_estado) {
+
+	public void setId_estado(Long id_estado) {
 		this.id_estado = id_estado;
 	}
-	
+
 	public String getTipo() {
 		return Tipo;
 	}
