@@ -2,7 +2,7 @@ package seguros.model;
 
 import java.util.Date;
 
-public class CriteriosReporte {
+public class ParametrosReporte {
 
 	private Date fechaDesde;
 	private Date fechaHasta;

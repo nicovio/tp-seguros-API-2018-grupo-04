@@ -1,10 +1,7 @@
 package seguros.model;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -17,7 +14,8 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import seguros.exception.CambioDeEstadoNoPermitidoException;
+import seguros.exception.Validaciones;
 
 @Entity
 @Table(name = "poliza")
@@ -48,8 +46,8 @@ public class Poliza {
 	@JoinColumn(name = "id_estado", insertable = false, updatable = false)
 	private Estado estado;
 
-	public String getEstado() {
-		return estado.getDescripcion();
+	public Estado getEstado() {
+		return estado;
 	}
 
 	public LocalDate getFecha_inicio() {
@@ -76,7 +74,8 @@ public class Poliza {
 		return id_estado;
 	}
 
-	public void setId_estado(Long id_estado) {
+	public void cambiarEstado(Long id_estado) throws Exception {
+		Validaciones.validarCambioEstado(this.id_estado);
 		this.id_estado = id_estado;
 	}
 

@@ -1,7 +1,7 @@
 package seguros.model;
 
 public interface Reporte {
-
+	
 	String getTipo();
 
 	String getEstado();
