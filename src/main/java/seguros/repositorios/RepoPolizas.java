@@ -14,7 +14,26 @@ import seguros.model.Reporte;
 @Repository
 public interface RepoPolizas extends JpaRepository<Poliza, Long> {
 
-	@Query(value = "select est.descripcion as estado ,tipo, count(poliza.ID) as cantidad, sum(prima) as valor_prima from poliza inner join tomador on poliza.ID = tomador.ID_Poliza inner join estado as est on poliza.id_estado = est.id where Fecha_Inicio >= :fechaDesde and Fecha_Inicio <= :fechaHasta and DNI_Agente = :dniAgente group by poliza.tipo, poliza.ID_Estado order by poliza.tipo, poliza.ID_Estado ", nativeQuery = true)
+	@Query(value = 
+			"select pol.tipo,"
+		  + "       pol.id_estado,"
+		  + "       est.descripcion as estado,"
+		  + "       count(pol.id) as cantidad,"
+		  + "       sum(pol.prima) as valor_prima"
+		  + "  from poliza as pol"
+		  + " inner join tomador as tom "
+		  + "    on pol.id = tom.id_poliza "
+		  + " inner join estado as est "
+		  + "    on pol.id_estado = est.id "
+		  + " where pol.fecha_inicio >= :fechaDesde "
+		  + "   and pol.fecha_inicio <= :fechaHasta "
+		  + "   and tom.dni_agente = :dniAgente "
+		  + " group by pol.tipo,"
+		  + "          pol.id_estado,"
+		  + "          est.descripcion"
+		  + " order by pol.tipo,"
+		  + "          est.descripcion"
+		  , nativeQuery = true)
 	List<Reporte> obtenerPolizasDeUnAgenteEntreFechas(@Param("dniAgente") String dniAgente,
 			@Param("fechaDesde") Date fechaDesde, @Param("fechaHasta") Date fechaHasta);
 }
