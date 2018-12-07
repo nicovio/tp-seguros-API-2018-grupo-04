@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import seguros.model.Estado;
 import seguros.model.Poliza;
 import seguros.model.Reporte;
 
@@ -36,4 +37,15 @@ public interface RepoPolizas extends JpaRepository<Poliza, Long> {
 		  , nativeQuery = true)
 	List<Reporte> obtenerPolizasDeUnAgenteEntreFechas(@Param("dniAgente") String dniAgente,
 			@Param("fechaDesde") Date fechaDesde, @Param("fechaHasta") Date fechaHasta);
+	
+	
+	@Query(value = "select * from poliza where poliza.id in (select id_poliza from poliza_vida)", nativeQuery = true)
+	List<Poliza> findPolizasDeVida();
+	
+	@Query(value = "select * from poliza where poliza.id in (select id_poliza from poliza_vivienda)", nativeQuery = true)
+	List<Poliza> findPolizasDeHogar();
+	
+	
+	@Query(value = "select * from poliza where poliza.id in (select id_poliza from poliza_automovil)", nativeQuery = true)
+	List<Poliza> findPolizasDeAutomovil();
 }

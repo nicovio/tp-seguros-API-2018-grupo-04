@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import seguros.exception.ResourceNotFoundException;
-import seguros.model.ParametrosReporte;
 import seguros.model.Poliza;
 import seguros.model.Reporte;
 import seguros.repositorios.RepoPolizas;
@@ -36,12 +34,27 @@ public class PolizaController {
 		return polizasRepository.findAll();
 	}
 
+	@GetMapping("/polizas/vida")
+	public List<Poliza> getPolizasDeVida() {
+		return polizasRepository.findPolizasDeVida();
+	}
+	
+	@GetMapping("/polizas/hogar")
+	public List<Poliza> getPolizasDeHogar() {
+		return polizasRepository.findPolizasDeHogar();
+	}
+	
+	@GetMapping("/polizas/automovil")
+	public List<Poliza> getPolizasDeAutomovil() {
+		return polizasRepository.findPolizasDeAutomovil();
+	}
+
 	@GetMapping("/polizas/reporte")
-	public List<Reporte> getReporte(@RequestParam("fechaDesde") Date fechaDesde, 
+	public List<Reporte> getReporte(@RequestParam("fechaDesde") Date fechaDesde,
 			@RequestParam("fechaHasta") Date fechaHasta, @RequestParam("dniAgente") String dniAgente) {
 
-		List<Reporte> reporte = polizasRepository.obtenerPolizasDeUnAgenteEntreFechas(dniAgente,
-				fechaDesde, fechaHasta);
+		List<Reporte> reporte = polizasRepository.obtenerPolizasDeUnAgenteEntreFechas(dniAgente, fechaDesde,
+				fechaHasta);
 		return reporte;
 	}
 
