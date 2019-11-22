@@ -39,13 +39,13 @@ public interface RepoPolizas extends JpaRepository<Poliza, Long> {
 			@Param("fechaDesde") Date fechaDesde, @Param("fechaHasta") Date fechaHasta);
 	
 	
-	@Query(value = "select * from poliza where poliza.id in (select id_poliza from poliza_vida)", nativeQuery = true)
+	@Query(value = "select * from poliza where poliza.tipo = 'vida'", nativeQuery = true)
 	List<Poliza> findPolizasDeVida();
 	
-	@Query(value = "select * from poliza where poliza.id in (select id_poliza from poliza_vivienda)", nativeQuery = true)
+	@Query(value = "select * from poliza where poliza.tipo = 'hogar'", nativeQuery = true)
 	List<Poliza> findPolizasDeHogar();
 	
 	
-	@Query(value = "select * from poliza where poliza.id in (select id_poliza from poliza_automovil)", nativeQuery = true)
+	@Query(value = "select * from poliza where poliza.tipo = 'automovil'", nativeQuery = true)
 	List<Poliza> findPolizasDeAutomovil();
 }
